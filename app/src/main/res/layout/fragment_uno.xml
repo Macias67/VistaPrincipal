@@ -6,11 +6,5 @@
     tools:context="com.astrodev.chris.vistaprincipal.FragmentUno">
 
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="puchurrame"
-        android:id="@+id/boton"/>
-
 
 </FrameLayout>

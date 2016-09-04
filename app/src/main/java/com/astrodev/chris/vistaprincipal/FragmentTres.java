@@ -30,7 +30,7 @@ public class FragmentTres extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_tres, container, false);
-        //((VistaPrincipal)getActivity()).setActionbarTitulo("Favoritos");
+        //((VistaPrincipal)getActivity())
 
         return v;
     }

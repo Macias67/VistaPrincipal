@@ -27,7 +27,6 @@ public class VistaPrincipal extends AppCompatActivity {
     public ViewPager viewPager;
     public TabLayout tablayout;
 
-    public static VistaPrincipal vp;
 
     public int iconos[] = {
             R.mipmap.ic_local_cafe_white_24dp,
@@ -56,6 +55,7 @@ public class VistaPrincipal extends AppCompatActivity {
         iconosTabs();
 
         collapsingToolbarLayout.setTitleEnabled(true);
+        collapsingToolbarLayout.setTitle("Fragment 1");
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tablayout));
         tablayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -64,23 +64,23 @@ public class VistaPrincipal extends AppCompatActivity {
 
                     switch (tab.getPosition()) {
                         case 0:
-                            getSupportActionBar().setTitle("Cafés");
-                            Toast.makeText(getApplicationContext(), "Fragment 1", Toast.LENGTH_SHORT).show();
+                            collapsingToolbarLayout.setTitle("Fragment 1");
+
                             break;
                         case 1:
-                            getActionBar().setTitle("Restaurantes");
-                            Toast.makeText(getApplicationContext(), "Fragment 2", Toast.LENGTH_SHORT).show();
+                            collapsingToolbarLayout.setTitle("Fragment 2");
+
                             break;
                         case 2:
-                            toolbar.setTitle("Favoritos");
-                            Toast.makeText(getApplicationContext(), "Fragment 3", Toast.LENGTH_SHORT).show();
+                            collapsingToolbarLayout.setTitle("Fragment 3");
+
                             break;
                         case 3:
-                            toolbar.setTitle("Ubicación");
-                            Toast.makeText(getApplicationContext(), "Fragment 4", Toast.LENGTH_SHORT).show();
+                            collapsingToolbarLayout.setTitle("Fragment 4");
+
                             break;
                         case 4:
-                            toolbar.setTitle("Contáctanos");
+                            collapsingToolbarLayout.setTitle("Fragment 5");
                             break;
 
                 }
@@ -106,7 +106,7 @@ public class VistaPrincipal extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-            setActionbarTitulo("Cafés");
+
     }
 
 
@@ -146,18 +146,15 @@ public class VistaPrincipal extends AppCompatActivity {
 
     private void ponViewPager(ViewPager viewPager) {
         adaptadorViewPager adaptador = new adaptadorViewPager(getSupportFragmentManager());
-        adaptador.addFragment(new FragmentUno(), "Lugares");
-        adaptador.addFragment(new FragmentDos(), "Productos");
-        adaptador.addFragment(new FragmentTres(), "Novedades");
-        adaptador.addFragment(new FragmentCuatro(), "Eventos");
-        adaptador.addFragment(new FragmentCinco(), "Promos");
+        adaptador.addFragment(new FragmentUno(), "Fragment 1");
+        adaptador.addFragment(new FragmentDos(), "Fragment 2");
+        adaptador.addFragment(new FragmentTres(), "Fragment 3");
+        adaptador.addFragment(new FragmentCuatro(), "Fragment 4");
+        adaptador.addFragment(new FragmentCinco(), "Fragment 5");
         viewPager.setAdapter(adaptador);
 
     }
 
-    public void setActionbarTitulo(String titulo) {
-        toolbar.setTitle(titulo);
-    }
 
     public void iconosTabs() {
         tablayout.getTabAt(0).setIcon(iconos[0]);
