@@ -51,6 +51,7 @@ public class FragmentUno extends Fragment {
 
         final RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.movies_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setHasFixedSize(true);
 
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 

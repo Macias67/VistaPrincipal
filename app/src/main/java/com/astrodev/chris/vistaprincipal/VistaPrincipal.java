@@ -15,29 +15,32 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.flaviofaria.kenburnsview.KenBurnsView;
+import com.flaviofaria.kenburnsview.RandomTransitionGenerator;
 import com.flaviofaria.kenburnsview.Transition;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class VistaPrincipal extends AppCompatActivity {
+public class VistaPrincipal extends AppCompatActivity implements KenBurnsView.TransitionListener {
 
+    private static final int TRANSITIONS_TO_SWITCH = 3;
     public static Toolbar toolbar;
-    public static VistaPrincipal vp;
     public CollapsingToolbarLayout collapsingToolbarLayout;
     public ViewPager viewPager;
     public TabLayout tablayout;
-    public KenBurnsView imageView;
     public int iconos[] = {
             R.mipmap.ic_local_cafe_white_24dp,
             R.mipmap.ic_restaurant_white_24dp,
             R.mipmap.ic_favorite_white_24dp,
             R.mipmap.ic_location_on_white_24dp,
             R.mipmap.ic_call_white_24dp};
-
+    private ViewSwitcher mViewSwitcher;
+    private int mTransitionsCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +48,11 @@ public class VistaPrincipal extends AppCompatActivity {
         setContentView(R.layout.activity_vista_principal);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //toolbar.setTitle("Cafe");
+        toolbar.setTitle("Cafe");
         setSupportActionBar(toolbar);
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_colapsing);
+
 
         viewPager = (ViewPager) findViewById(R.id.viewPager_principal);
         ponViewPager(viewPager);
@@ -57,22 +61,19 @@ public class VistaPrincipal extends AppCompatActivity {
         tablayout.setupWithViewPager(viewPager);
         iconosTabs();
 
-        imageView = (KenBurnsView) findViewById(R.id.img_toolbar_col);
-        imageView.setImageResource(R.drawable.beersshark);
-        imageView.setTransitionListener(new KenBurnsView.TransitionListener() {
-            @Override
-            public void onTransitionStart(Transition transition) {
+        mViewSwitcher = (ViewSwitcher) findViewById(R.id.viewSwitcher);
+        RandomTransitionGenerator generator = new RandomTransitionGenerator(5000, new AccelerateDecelerateInterpolator());
 
-            }
+        KenBurnsView img1 = (KenBurnsView) findViewById(R.id.img_toolbar_col);
+        KenBurnsView img2 = (KenBurnsView) findViewById(R.id.img_toolbar_col2);
 
-            @Override
-            public void onTransitionEnd(Transition transition) {
+        img1.setTransitionListener(this);
+        img2.setTransitionListener(this);
+        img1.setTransitionGenerator(generator);
+        img2.setTransitionGenerator(generator);
 
-            }
-        });
-
-        collapsingToolbarLayout.setTitleEnabled(true);
-        collapsingToolbarLayout.setTitle("Cafés");
+        collapsingToolbarLayout.setTitleEnabled(false);
+        //collapsingToolbarLayout.setTitle("Cafés");
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tablayout));
         tablayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -81,25 +82,24 @@ public class VistaPrincipal extends AppCompatActivity {
 
                 switch (tab.getPosition()) {
                     case 0:
-                        collapsingToolbarLayout.setTitle("Cafés");
-                        imageView.setImageResource(R.drawable.beersshark);
+                        toolbar.setTitle("Cafés");
+                        //imageView.setImageResource(R.drawable.beersshark);
                         break;
                     case 1:
-                        collapsingToolbarLayout.setTitle("Restaurantes");
                         toolbar.setTitle("Restaurantes");
-                        imageView.setImageResource(R.drawable.coffeebeans);
+                        //imageView.setImageResource(R.drawable.coffeebeans);
                         break;
                     case 2:
-                        collapsingToolbarLayout.setTitle("Favoritos");
-                        imageView.setImageResource(R.drawable.cupbreakfast);
+                        toolbar.setTitle("Favoritos");
+                        //imageView.setImageResource(R.drawable.cupbreakfast);
                         break;
                     case 3:
-                        collapsingToolbarLayout.setTitle("Ubicación");
-                        imageView.setImageResource(R.drawable.headertabs);
+                        toolbar.setTitle("Ubicación");
+                        //imageView.setImageResource(R.drawable.headertabs);
                         break;
                     case 4:
-                        collapsingToolbarLayout.setTitle("Contáctanos");
-                        imageView.setImageResource(R.drawable.pizza);
+                        toolbar.setTitle("Contáctanos");
+                        //imageView.setImageResource(R.drawable.pizza);
                         break;
                 }
             }
@@ -167,6 +167,20 @@ public class VistaPrincipal extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onTransitionStart(Transition transition) {
+
+    }
+
+    @Override
+    public void onTransitionEnd(Transition transition) {
+        mTransitionsCount++;
+        if (mTransitionsCount == TRANSITIONS_TO_SWITCH) {
+            mViewSwitcher.showNext();
+            mTransitionsCount = 0;
+        }
     }
 
     class adaptadorViewPager extends FragmentPagerAdapter {
