@@ -15,8 +15,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.flaviofaria.kenburnsview.KenBurnsView;
+import com.flaviofaria.kenburnsview.Transition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +30,7 @@ public class VistaPrincipal extends AppCompatActivity {
     public CollapsingToolbarLayout collapsingToolbarLayout;
     public ViewPager viewPager;
     public TabLayout tablayout;
-    public ImageView imageView;
+    public KenBurnsView imageView;
     public int iconos[] = {
             R.mipmap.ic_local_cafe_white_24dp,
             R.mipmap.ic_restaurant_white_24dp,
@@ -53,11 +55,21 @@ public class VistaPrincipal extends AppCompatActivity {
 
         tablayout = (TabLayout) findViewById(R.id.tablayout_principal);
         tablayout.setupWithViewPager(viewPager);
-
-        imageView = (ImageView) findViewById(R.id.img_toolbar_col);
-        imageView.setImageResource(R.drawable.beersshark);
-
         iconosTabs();
+
+        imageView = (KenBurnsView) findViewById(R.id.img_toolbar_col);
+        imageView.setImageResource(R.drawable.beersshark);
+        imageView.setTransitionListener(new KenBurnsView.TransitionListener() {
+            @Override
+            public void onTransitionStart(Transition transition) {
+
+            }
+
+            @Override
+            public void onTransitionEnd(Transition transition) {
+
+            }
+        });
 
         collapsingToolbarLayout.setTitleEnabled(true);
         collapsingToolbarLayout.setTitle("Cafés");
@@ -74,6 +86,7 @@ public class VistaPrincipal extends AppCompatActivity {
                         break;
                     case 1:
                         collapsingToolbarLayout.setTitle("Restaurantes");
+                        toolbar.setTitle("Restaurantes");
                         imageView.setImageResource(R.drawable.coffeebeans);
                         break;
                     case 2:
