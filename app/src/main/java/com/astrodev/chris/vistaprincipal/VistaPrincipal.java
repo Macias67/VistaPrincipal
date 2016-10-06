@@ -1,10 +1,7 @@
 package com.astrodev.chris.vistaprincipal;
 
-
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,13 +13,19 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.astrodev.chris.vistaprincipal.principalFragments.FragmentCinco;
+import com.astrodev.chris.vistaprincipal.principalFragments.FragmentCuatro;
+import com.astrodev.chris.vistaprincipal.principalFragments.FragmentDos;
+import com.astrodev.chris.vistaprincipal.principalFragments.FragmentTres;
+import com.astrodev.chris.vistaprincipal.principalFragments.FragmentUno;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class VistaPrincipal extends AppCompatActivity {
 
     public CollapsingToolbarLayout collapsingToolbarLayout;
-    public static Toolbar toolbar;
+    public Toolbar toolbar;
     public ViewPager viewPager;
     public TabLayout tablayout;
 
@@ -93,16 +96,6 @@ public class VistaPrincipal extends AppCompatActivity {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
 
-            }
-        });
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
             }
         });
 
