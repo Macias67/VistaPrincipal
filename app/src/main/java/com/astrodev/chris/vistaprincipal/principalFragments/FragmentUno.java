@@ -29,6 +29,8 @@ import com.astrodev.chris.vistaprincipal.R;
 
 public class FragmentUno extends Fragment {
 
+    // A falta de conocimiento de Fragments, va incluido el codigo en el onCreateView del fragmen.
+    // la peticion de REST hacia MOVIES_DB
 
     public FragmentUno() {
         // Required empty public constructor

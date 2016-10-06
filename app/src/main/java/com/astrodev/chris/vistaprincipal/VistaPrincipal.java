@@ -147,7 +147,6 @@ public class VistaPrincipal extends AppCompatActivity {
 
     }
 
-
     public void iconosTabs() {
         tablayout.getTabAt(0).setIcon(iconos[0]);
         tablayout.getTabAt(1).setIcon(iconos[1]);
@@ -177,6 +176,5 @@ public class VistaPrincipal extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 
 }
