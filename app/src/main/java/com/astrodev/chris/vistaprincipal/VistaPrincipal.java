@@ -2,11 +2,15 @@ package com.astrodev.chris.vistaprincipal;
 
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -29,6 +33,8 @@ public class VistaPrincipal extends AppCompatActivity {
     public ViewPager viewPager;
     public TabLayout tablayout;
 
+    private DrawerLayout drawerLayout;
+
 
     public int iconos[] = {
             R.mipmap.ic_local_cafe_white_24dp,
@@ -43,8 +49,10 @@ public class VistaPrincipal extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vista_principal);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        ponerToolbar();
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_colapsing);
 
@@ -84,7 +92,6 @@ public class VistaPrincipal extends AppCompatActivity {
                         case 4:
                             collapsingToolbarLayout.setTitle("Fragment 5");
                             break;
-
                 }
             }
 
@@ -99,6 +106,16 @@ public class VistaPrincipal extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void ponerToolbar(){
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        final ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null){
+            actionBar.setHomeAsUpIndicator(R.mipmap.ic_menu_white_24dp);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
 
@@ -170,10 +187,12 @@ public class VistaPrincipal extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id){
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
         }
-
+        drawerLayout.closeDrawer(GravityCompat.START);
         return super.onOptionsItemSelected(item);
     }
 
