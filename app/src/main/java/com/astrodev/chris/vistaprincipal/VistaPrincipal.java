@@ -1,5 +1,10 @@
 package com.astrodev.chris.vistaprincipal;
 
+import android.content.Intent;
+import android.net.Uri;
+
+import com.astrodev.chris.vistaprincipal.login.LoginActivity;
+import com.bumptech.glide.Glide;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
@@ -16,15 +21,23 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.astrodev.chris.vistaprincipal.principalFragments.FragmentCinco;
 import com.astrodev.chris.vistaprincipal.principalFragments.FragmentCuatro;
 import com.astrodev.chris.vistaprincipal.principalFragments.FragmentDos;
 import com.astrodev.chris.vistaprincipal.principalFragments.FragmentTres;
 import com.astrodev.chris.vistaprincipal.principalFragments.FragmentUno;
+import com.facebook.login.LoginManager;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class VistaPrincipal extends AppCompatActivity {
 
@@ -34,7 +47,10 @@ public class VistaPrincipal extends AppCompatActivity {
     public TabLayout tablayout;
 
     private DrawerLayout drawerLayout;
+    private CircleImageView circleImageView;
+    private TextView nombre_header, email_header;
 
+    private FirebaseUser usuarioLogeado = FirebaseAuth.getInstance().getCurrentUser();
 
     public int iconos[] = {
             R.mipmap.ic_local_cafe_white_24dp,
@@ -43,35 +59,42 @@ public class VistaPrincipal extends AppCompatActivity {
             R.mipmap.ic_location_on_white_24dp,
             R.mipmap.ic_call_white_24dp};
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vista_principal);
-
+//Metodo que da posición y propiedades a la toolbar y ActionBar como tal.
         ponerToolbar();
 
+// Elementos del Navigation Drawer Menu
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        circleImageView = (CircleImageView) findViewById(R.id.circle_image_header);
+        nombre_header = (TextView) findViewById(R.id.username_header);
+        email_header = (TextView) findViewById(R.id.email_header);
 
+//Elementos delCollapsingTollBar
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_colapsing);
-
-        viewPager = (ViewPager) findViewById(R.id.viewPager_principal);
-        ponViewPager(viewPager);
-
-        tablayout = (TabLayout) findViewById(R.id.tablayout_principal);
-        tablayout.setupWithViewPager(viewPager);
-
-        iconosTabs();
-
         collapsingToolbarLayout.setTitleEnabled(true);
         collapsingToolbarLayout.setTitle("Fragment 1");
 
+// Elementos de las Tab's y sus contenedores, se crea el contenedor de los Fragments y se le asigna
+// el tabLayout para control con Tab's.
+        viewPager = (ViewPager) findViewById(R.id.viewPager_principal);
+        ponViewPager(viewPager);
+        tablayout = (TabLayout) findViewById(R.id.tablayout_principal);
+        tablayout.setupWithViewPager(viewPager);
+
+//Metodo que Asigna un icono a cada Tab.
+        iconosTabs();
+
+//Visualizador de los Fragments que son contenido de Cada Tab.
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tablayout));
+
+//Metodo que ejecuta alguna acción al tocar un Tab.
         tablayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-
                     switch (tab.getPosition()) {
                         case 0:
                             collapsingToolbarLayout.setTitle("Fragment 1");
@@ -106,6 +129,24 @@ public class VistaPrincipal extends AppCompatActivity {
             }
         });
 
+        if (navigationView != null) {
+            setupDrawerContent(navigationView);
+        }
+
+        if(usuarioLogeado != null){
+            String provedorId = usuarioLogeado.getProviderId();
+            String nombre = usuarioLogeado.getDisplayName();
+            String email = usuarioLogeado.getEmail();
+            Uri imagenPerfil = usuarioLogeado.getPhotoUrl();
+
+          //  circleImageView.setImageURI(imagenPerfil);
+           // nombre_header.setText(nombre);
+           // email_header.setText(email);
+        } else {
+            startActivity(new Intent(VistaPrincipal.this, LoginActivity.class));
+            finish();
+        }
+
     }
 
     public void ponerToolbar(){
@@ -119,7 +160,6 @@ public class VistaPrincipal extends AppCompatActivity {
     }
 
 
-
     class adaptadorViewPager extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
@@ -130,10 +170,8 @@ public class VistaPrincipal extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-
             return mFragmentList.get(position);
         }
-
 
         @Override
         public int getCount() {
@@ -149,7 +187,6 @@ public class VistaPrincipal extends AppCompatActivity {
         public void addFragment(Fragment fragment, String titulo) {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(titulo);
-
         }
     }
 
@@ -181,19 +218,42 @@ public class VistaPrincipal extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         switch (id){
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
         }
-        drawerLayout.closeDrawer(GravityCompat.START);
         return super.onOptionsItemSelected(item);
     }
 
+    private void setupDrawerContent(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        menuItem.setChecked(true);
+                        int id = menuItem.getItemId();
+
+                        switch (id){
+                            case R.id.cerrar_sesion:
+                                FirebaseAuth.getInstance().signOut();
+                                LoginManager.getInstance().logOut();
+                                startActivity(new Intent(VistaPrincipal.this, LoginActivity.class));
+                                finish();
+                        }
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        return true;
+                    }
+                }
+        );
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Toast.makeText(VistaPrincipal.this, "metodo onBackPressed !!", Toast.LENGTH_SHORT).show();
+    }
 }

@@ -4,7 +4,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="192dp"
-        android:background="@drawable/pizza"
+        android:background="@color/colorPrimaryDark"
         android:gravity="bottom"
         android:orientation="vertical"
         android:padding="16dp"
@@ -12,17 +12,18 @@
 
         <!-- Imagen de perfil -->
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/circle_image"
+            android:id="@+id/circle_image_header"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginBottom="16dp"
             android:scaleType="centerCrop"
             android:src="@drawable/coffeebeans"
-             />
+             >
+        </de.hdodenhof.circleimageview.CircleImageView>
 
         <!-- Nombre de Usuario -->
         <TextView
-            android:id="@+id/username"
+            android:id="@+id/username_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Nombre de Usuario"
@@ -31,7 +32,7 @@
 
         <!-- Correo de la cuenta -->
         <TextView
-            android:id="@+id/email"
+            android:id="@+id/email_header"
             style="@style/Widget.AppCompat.Spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

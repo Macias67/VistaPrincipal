@@ -5,7 +5,8 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="false"
+    >
 
     <android.support.design.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -13,6 +14,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         tools:context="com.astrodev.chris.vistaprincipal.VistaPrincipal">
 
 
@@ -22,7 +24,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.AppBarOverlay"
-            app:elevation="15dp">
+            app:elevation="15dp"
+            android:fitsSystemWindows="true">
 
             <android.support.design.widget.CollapsingToolbarLayout
                 xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -77,6 +80,7 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_drawer_header"
-        app:menu="@menu/drawer_list_menu" />
+        app:menu="@menu/drawer_list_menu"
+        />
 
 </android.support.v4.widget.DrawerLayout>

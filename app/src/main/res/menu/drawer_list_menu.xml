@@ -25,9 +25,8 @@
             android:title="Otra opción"
             />
         <item
-
-            android:title="Otra opción"
-            />
+            android:title="Cerrar Sesion"
+            android:id="@+id/cerrar_sesion"/>
 
 
     </group>

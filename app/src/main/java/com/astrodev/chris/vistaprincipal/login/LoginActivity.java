@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.astrodev.chris.vistaprincipal.R;
@@ -29,13 +30,18 @@ import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import java.lang.reflect.Array;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -44,6 +50,8 @@ public class LoginActivity extends AppCompatActivity {
     private LoginButton botonLogin;
     private CallbackManager callbackManager;
     private FirebaseAuth auth;
+    private FirebaseAuth.AuthStateListener authStateListener;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +70,25 @@ public class LoginActivity extends AppCompatActivity {
         // establecer devoluciones de la llamada
 
         botonLogin = (LoginButton) findViewById(R.id.botonLoginFB);
+        botonLogin.setReadPermissions(Arrays.asList("email"));
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         loginEmail = (EditText) findViewById(R.id.loginEmail);
         loginPassword = (EditText) findViewById(R.id.loginPassword);
         btn_logear = (Button) findViewById(R.id.btn_logear);
         btn_registrar = (Button) findViewById(R.id.btn_registrar);
+
+
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser usuario = auth.getCurrentUser();
+                if(usuario != null){
+                    // Ve a Vista Principal.
+                    startActivity(new Intent(LoginActivity.this, VistaPrincipal.class));
+                    finish();
+                }
+            }
+        };
 
 // Boton de Logeo con email y password
 
@@ -106,14 +129,9 @@ public class LoginActivity extends AppCompatActivity {
         botonLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                String usuarioId = loginResult.getAccessToken().getUserId();
-                String accessToken = loginResult.getAccessToken().getToken();
-                Profile profile = Profile.getCurrentProfile();
+                handleFacebookAccessToken(loginResult.getAccessToken());
 
-              //  String perfilImgUrl = "https://graph.facebook.com/" + usuarioId + "/picture?type=large";
-                // Glide.with(LoginActivity.this).load(perfilImgUrl).into(imagenDePerfil);
             }
-
             @Override
             public void onCancel() {
                 String cancelado = "Inicio de sesión cancelado !!";
@@ -126,12 +144,29 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private boolean estasLogeado(){
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        return (accessToken != null) && (!accessToken.isExpired());
+    private void handleFacebookAccessToken(AccessToken token) {
+        progressBar.setVisibility(View.VISIBLE);
+        botonLogin.setVisibility(View.GONE);
+
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+
+        auth.signInWithCredential(credential)
+                .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        if(!task.isSuccessful()){
+                            Toast.makeText(LoginActivity.this, "Error con Facebook", Toast.LENGTH_SHORT).show();
+                        }
+
+                        progressBar.setVisibility(View.GONE);
+                        botonLogin.setVisibility(View.VISIBLE);
+                    }
+                });
     }
 
-    public void printKeyHash() {
+
+        public void printKeyHash() {
         try {
             PackageInfo info = getPackageManager().getPackageInfo("com.astrodev.chris.loginwhitfb",
                     PackageManager.GET_SIGNATURES);
@@ -161,5 +196,17 @@ public class LoginActivity extends AppCompatActivity {
 
         // Logs de'app desactivada' App Eventos.
         AppEventsLogger.deactivateApp(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        auth.addAuthStateListener(authStateListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        auth.removeAuthStateListener(authStateListener);
     }
 }
