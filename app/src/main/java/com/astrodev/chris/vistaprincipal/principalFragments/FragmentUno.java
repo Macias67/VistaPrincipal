@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
-import android.support.design.widget.FloatingActionButton;
 
 import com.astrodev.chris.vistaprincipal.VistaPrincipal;
 import com.astrodev.chris.vistaprincipal.retroFit2.MoviesAdapter;
@@ -54,13 +53,6 @@ public class FragmentUno extends Fragment {
         final String TAG = VistaPrincipal.class.getSimpleName();
         final String API_KEY = "fee78edd7a9feab91c1cc5d9d49ddf61";
 
-        FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getContext(), "Recargando ...", Toast.LENGTH_LONG).show();
-            }
-        });
 
         if (API_KEY.isEmpty()) {
             Toast.makeText(getContext(), "Fallo en la ApiKey", Toast.LENGTH_LONG).show();

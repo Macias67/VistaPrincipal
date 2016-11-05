@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "221850122612",
+    "firebase_url": "https://fir-users-2006a.firebaseio.com",
+    "project_id": "fir-users-2006a",
+    "storage_bucket": "fir-users-2006a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:221850122612:android:7a9ba12b9d3208ac",
+        "android_client_info": {
+          "package_name": "com.astrodev.chris.frirebaseusers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "221850122612-849jps18fo0q15i27h3it854obcrpn59.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSYEBlSoGrwFXyBIQRo86VVRhUnZkw9OY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:221850122612:android:4362c83b72d0e837",
+        "android_client_info": {
+          "package_name": "com.astrodev.chris.vistaprincipal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "221850122612-849jps18fo0q15i27h3it854obcrpn59.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSYEBlSoGrwFXyBIQRo86VVRhUnZkw9OY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
